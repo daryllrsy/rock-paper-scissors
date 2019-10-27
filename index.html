@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Rock-Paper-Scissors!</title>
+    </head>
+    <body>
+        <script>
+            "use strict";
+
+            const PLAY = ["Rock", "Paper", "Scissors"];
+            const PLAY_VAL = {"Rock": 1, "Paper": 0, "Scissors": -1};
+            
+            function capitalize(string) {
+                let newString = string.toLowerCase(); 
+                return newString.replace(newString[0], 
+                    newString[0].toUpperCase());
+            }
+
+            let computerPlay = () => PLAY[Math.floor(Math.random()*3)];
+
+            function playRound(playerSelection, computerSelection) {                
+                let player = PLAY_VAL[playerSelection];
+                let comp = PLAY_VAL[computerSelection];
+                
+                let outcome = undefined;
+
+                function getOutcome(winValue) {
+                    if(player + comp === winValue){
+                        return ["Win", "beats"];
+                    } 
+                    else{
+                        return ["Lose", "loses to"];
+                    }
+                }
+
+                if(player === comp){
+                    return [`Draw! Both played ${playerSelection}s!`, null];
+                }
+                else if(player === 1){
+                    outcome = getOutcome(0);
+                }
+                else if(player === 0){
+                    outcome = getOutcome(1);
+                }
+                else if(player === -1){
+                    outcome = getOutcome(-1);
+                }
+                else{
+                    return "Oops! Something went wrong!";
+                }
+
+                if(outcome){
+                    return [`You ${outcome[0]}! ${playerSelection} ${outcome[1]} ${computerSelection}!`, outcome[0]]
+                }
+                else{
+                    return ["Oops! Something went wrong!", null];
+                }
+            }
+
+            function game(roundCount=5){
+                let playerScore = 0;
+                let compScore = 0;
+
+                for(let i=0; i < roundCount; i++){
+                    let playerSelection = capitalize(window.prompt(
+                        "      What's your play?\n- Rock - Paper - Scissors -"));
+                    let computerSelection = computerPlay();
+                    let results = playRound(playerSelection, computerSelection);
+
+                    if(results[1] === "Win"){
+                        playerScore++;
+                    }
+                    else if(results[1] === "Lose"){
+                        compScore++;
+                    }
+
+                    console.log(results[0]);
+                }
+
+                let msg = undefined;
+                if(playerScore === compScore){
+                    msg = "It's a tie!";
+                }
+                else if(playerScore > compScore){
+                    msg = "You win!";
+                }
+                else{
+                    msg = "You lose!";
+                }
+
+                console.log(`${msg} ${playerScore}-${compScore} against the computer.`);
+            }
+
+            game();
+        </script>
+    </body>
